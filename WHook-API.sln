@@ -1,0 +1,24 @@
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.5.2.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WHook-API", "WHook-API.csproj", "{CEDC7E8C-2D30-CD9C-7401-56E8A853FAD4}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{CEDC7E8C-2D30-CD9C-7401-56E8A853FAD4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CEDC7E8C-2D30-CD9C-7401-56E8A853FAD4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CEDC7E8C-2D30-CD9C-7401-56E8A853FAD4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CEDC7E8C-2D30-CD9C-7401-56E8A853FAD4}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {AF2906F7-F4E0-4014-B8DF-6790A79E1518}
+	EndGlobalSection
+EndGlobal
