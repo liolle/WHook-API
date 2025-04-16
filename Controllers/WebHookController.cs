@@ -9,11 +9,11 @@ public class WebHookController : ControllerBase
   private readonly ILogger<WebHookController> _logger;
   private readonly IConfiguration _config;
   private readonly IScriptService _scriptService;
-  private readonly IScriptLauncherService _scriptLauncer;
+  private readonly IScriptLauncherService _scriptLauncher;
 
   public WebHookController(ILogger<WebHookController> logger, IConfiguration config, IScriptService scriptService, IScriptLauncherService scriptLauncher)
   {
-    _scriptLauncer = scriptLauncher;
+    _scriptLauncher = scriptLauncher;
     _logger = logger;
     _scriptService = scriptService;
     _config = config;
@@ -23,22 +23,27 @@ public class WebHookController : ControllerBase
   [HttpPost]
   public async Task<IActionResult> DeployWebHook([FromBody] ApiKeyPayload payload)
   {
+    _logger.LogInformation("1");
     if (!ModelState.IsValid){
+      _logger.LogInformation("1");
       return BadRequest("Missing body elements");
     }
-
+    _logger.LogInformation("3");
     if (!_scriptService.IsApiKeyValidForScript(payload)){
+      _logger.LogInformation("4");
       return Unauthorized();
     }
-
+    _logger.LogInformation("5");
     string scriptDirectory = _config["SCRIPT_DIRECTORY"] ?? "";
     if (String.IsNullOrEmpty(scriptDirectory)){
+      _logger.LogInformation("6");
       return BadRequest("Deployment failed");
     }
-
-    bool result = await _scriptLauncer.Execute(payload.PROJECT_ID,""); 
-
+    _logger.LogInformation("7");
+    bool result = await _scriptLauncher.Execute(payload.PROJECT_ID,""); 
+    _logger.LogInformation("8");
     if (!result){
+      _logger.LogInformation("9");
       return BadRequest("Deployment failed");
     }
 
