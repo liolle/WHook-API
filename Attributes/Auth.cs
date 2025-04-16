@@ -18,6 +18,7 @@ public class RequireAdmin : Attribute, IAsyncActionFilter
     }
     string admin_key = extractedApiKey.ToString(); 
 
+    Console.WriteLine(admin_key);
     IScriptService service = context.HttpContext.RequestServices.GetRequiredService<IScriptService>();
     if (!service.IsAdmin(admin_key))
     {

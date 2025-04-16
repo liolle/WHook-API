@@ -34,7 +34,7 @@ public class ScriptService(IDataContext context, KeyService keyService,IConfigur
     }
     catch (Exception e)
     {
-      Console.WriteLine(e.Message);
+      Console.WriteLine($"AdminKey Generation: {e.Message}");
       return null; 
     }
   }
@@ -60,7 +60,7 @@ public class ScriptService(IDataContext context, KeyService keyService,IConfigur
     }
     catch (Exception e)
     {
-      Console.WriteLine(e.Message);
+      Console.WriteLine($"Key Generation: {e.Message}");
       return null; 
     }
   }
@@ -79,17 +79,17 @@ public class ScriptService(IDataContext context, KeyService keyService,IConfigur
       WHERE Value = @Key";
 
     command.Parameters.AddWithValue("@Key", key);
-
     try
     {
       con.Open();
-      int result = command.ExecuteNonQuery();
-      if (result < 1){return false; }
-      return true;
+       
+      SQLiteDataReader reader = command.ExecuteReader();
+      if (reader.Read()){return true; }
+      return false;
     }
     catch (Exception e)
     {
-      Console.WriteLine(e.Message);
+      Console.WriteLine($"Admin check: {e.Message}");
       return false; 
     }
   }
@@ -113,13 +113,12 @@ public class ScriptService(IDataContext context, KeyService keyService,IConfigur
       con.Open();
   
       SQLiteDataReader reader = command.ExecuteReader();
-
       if (reader.Read()){return true; }
       return false;
     }
     catch (Exception e)
     {
-      Console.WriteLine(e.Message);
+      Console.WriteLine($"Key Validation: {e.Message}");
       return false; 
     }
   }
