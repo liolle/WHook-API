@@ -21,6 +21,13 @@ public class WebHookController : ControllerBase
     _logger.LogInformation("Incomming request");
   }
 
+  [HttpGet]
+  public IActionResult Root()
+  {
+    return Ok("Root GET");
+  }
+
+
   [Route("webhooks/ping")]
   [HttpGet]
   public IActionResult Ping()
