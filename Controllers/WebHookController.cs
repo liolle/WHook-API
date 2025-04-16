@@ -21,6 +21,8 @@ public class WebHookController : ControllerBase
     _logger.LogInformation("Incomming request");
   }
 
+  [Route("webhooks/ping")]
+  [HttpGet]
   public IActionResult Ping()
   {
     return Ok("Pong");
@@ -30,27 +32,18 @@ public class WebHookController : ControllerBase
   [HttpPost]
   public async Task<IActionResult> DeployWebHook([FromBody] ApiKeyPayload payload)
   {
-    _logger.LogInformation("1");
     if (!ModelState.IsValid){
-      _logger.LogInformation("1");
       return BadRequest("Missing body elements");
     }
-    _logger.LogInformation("3");
     if (!_scriptService.IsApiKeyValidForScript(payload)){
-      _logger.LogInformation("4");
       return Unauthorized();
     }
-    _logger.LogInformation("5");
     string scriptDirectory = _config["SCRIPT_DIRECTORY"] ?? "";
     if (String.IsNullOrEmpty(scriptDirectory)){
-      _logger.LogInformation("6");
       return BadRequest("Deployment failed");
     }
-    _logger.LogInformation("7");
     bool result = await _scriptLauncher.Execute(payload.PROJECT_ID,""); 
-    _logger.LogInformation("8");
     if (!result){
-      _logger.LogInformation("9");
       return BadRequest("Deployment failed");
     }
 
