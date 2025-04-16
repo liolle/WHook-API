@@ -17,6 +17,13 @@ public class WebHookController : ControllerBase
     _logger = logger;
     _scriptService = scriptService;
     _config = config;
+
+    _logger.LogInformation("Incomming request");
+  }
+
+  public IActionResult Ping()
+  {
+    return Ok("Pong");
   }
 
   [Route("webhooks/deploy")]
