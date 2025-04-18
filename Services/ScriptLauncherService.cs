@@ -1,5 +1,4 @@
 using System.Diagnostics;
-using System.Text;
 
 namespace whook.services;
 
@@ -45,33 +44,25 @@ public class ScriptLauncherService : IScriptLauncherService
         EnableRaisingEvents =true
     };
 
-    StringBuilder outputBuilder = new();
-    StringBuilder errorBuilder = new ();
 
-    using AutoResetEvent outputWaitHandle = new(false);
-    using AutoResetEvent errorWaitHandle = new(false);
+    Console.WriteLine($"Starting script"); // Real-time forwarding
+
 
     process.OutputDataReceived += (sender, e) =>
     {
-      if (e.Data == null)
+      if (!string.IsNullOrEmpty(e.Data)) // Important: e.Data will be null when stream closes
       {
-        outputWaitHandle.Set();
-      }
-      else
-      {
-        outputBuilder.AppendLine(e.Data);
+        string output = e.Data;
+        Console.WriteLine($"[STDOUT] {output}"); // Real-time forwarding
       }
     };
 
     process.ErrorDataReceived += (sender, e) =>
     {
-      if (e.Data == null)
+      if (!string.IsNullOrEmpty(e.Data))
       {
-        errorWaitHandle.Set();
-      }
-      else
-      {
-        errorBuilder.AppendLine(e.Data);
+        string error = e.Data;
+        Console.WriteLine($"[STDERR] {error}"); // Real-time forwarding
       }
     };
 
@@ -83,27 +74,23 @@ public class ScriptLauncherService : IScriptLauncherService
       process.BeginOutputReadLine();
       process.BeginErrorReadLine();
 
+
       // Wait for process exit asynchronously
       await process.WaitForExitAsync(cancellationToken);
 
-      // Wait for output/error streams to complete
-      await Task.Run(() =>
-          {
-          WaitHandle.WaitAll(new[] { outputWaitHandle, errorWaitHandle });
-          }, cancellationToken);
-
       if (process.ExitCode != 0)
       {
-        _logger.LogError($"Batch process failed with exit code {process.ExitCode}.\n Error: {errorBuilder}\n");
+        Console.WriteLine($"Batch process failed with exit code {process.ExitCode}.");
         return false; 
       }
 
+      Console.WriteLine($"Process completed successfully.");
       return true;
     }
-    catch (OperationCanceledException)
+    catch (Exception e)
     {
       if (!process.HasExited){process.Kill();}
-      _logger.LogError($"Process timeout exceeded\n");
+      Console.WriteLine($"Error executing process: {e.Message}");
       return false;
     }
     finally
